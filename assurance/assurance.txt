@@ -1,0 +1,174 @@
+#include <stdio.h>
+#include <stdlib.h>
+#include <time.h>
+#include <windows.h>
+#include <string.h>
+
+
+typedef int bool ;  //définition du type booléen,
+#define false  0 /* affectation des valeurs conventionnelles*/,
+#define true  1.
+
+int main() {
+
+  //SYSTEMTIME st;
+  //time_t t = time(NULL);
+  //struct tm tm = *localtime(&t);
+
+
+//Declaration des variables
+  float dateDeNaissance, taille;
+  int interventionChirurgicale, arretDeTravail, niveauSouhete;
+  int serologies;
+  long anneeActuelle=2022;
+  float majoration = 0.15;
+  char risque='0';
+  float poids,  age,  imc, budgetMaximal;
+
+
+ //Saisie des variables
+  printf("Veuillez entrer vos donnees \n");
+  printf("      Annee de naissance : ");
+  scanf("%f", &dateDeNaissance);                //entrer la date de naissance
+  printf("      Taille : ");
+  scanf("%f", &taille);                         // entrer de la taille
+  printf("      votre poids s'il vous plait : ");
+  scanf("%f", &poids);                          // entrer le poids
+  printf("      avez-vous ete opere pendant les 10 dernieres annees? tape 1 si oui et 0 sinon : ");
+  scanf("%d", &interventionChirurgicale);       //enter 1 ou 0 pour l'intervention chirurgicale
+  printf("      avez-vous un arret de travail de plus d'un mois lors des 5 dernieres annees? tape 1 si oui et 0 sinon : ");
+  scanf("%d", &arretDeTravail);                 // 1 pour l'arret de travail et 0 sinon
+
+
+  printf("      choisir entre ces quatre cas pour le test serologies  : \n");
+  printf("      Si votre depistage serologies est negatif appuyer sur 0  : \n");
+  printf("      Si votre depistage serologies est VHA positif appuyer sur 1  : \n");
+  printf("      Si votre depistage serologies est VHB positif appuyer sur 2  : \n");
+  printf("      Si votre depistage serologies est VHC positif appuyer sur 3  : \n");
+  printf("      Si votre depistage serologies est VIH positif appuyer sur 4  : ");
+  scanf("%d", &serologies);
+
+  printf("      Budget maximal : ");
+  scanf("%f", &budgetMaximal);
+
+
+  //age = 2022 - dateDeNaissance;
+  //imc =poids/(taille*taille);
+
+if((interventionChirurgicale==1) || (arretDeTravail==1) || ((serologies==2) || (serologies==3) || (serologies==4)))
+    {risque = 'H';}
+if(((anneeActuelle - dateDeNaissance) > 50) && (serologies == 2) && (poids / (0.0001*taille*taille) < 16.5) && (poids / (0.0001*taille*taille) > 30))
+    {risque = 'M';}
+if((interventionChirurgicale==0) && (arretDeTravail==0) && (serologies==0) && (anneeActuelle - dateDeNaissance) < 50)
+    {risque = 'F';}
+
+//printf("age = %.f \n",(anneeActuelle - dateDeNaissance) );
+//printf("imc = %f \n",((float)poids/(0.0001*taille*taille)));
+//printf("risque = %c\n",risque);
+printf("__________risque_______%c",risque);
+switch(risque)
+{
+case 'H':
+    printf("Demande d'adhesion rejetee\n");
+
+    break;
+case 'M':
+    printf("Liste des niveaux de prestations possibles :\n");
+
+    if(budgetMaximal>=1500*majoration)
+    {
+        printf("    niveau 1 : maximum de prestations remboursées = 3000 DT par an et par prestataire \n");
+        printf("    Tarif de cotisation total = %f DT.\n", 1800+(1800*majoration));
+    }
+
+    if(budgetMaximal>=1800*majoration)
+    {
+        printf("    niveau 2 : maximum de prestations remboursées = 3500 DT par an et par prestataire \n");
+        printf("    Tarif de cotisation total = %f DT.\n", 1800+(1800*majoration));
+    }
+//**********************************************************************************
+
+    printf("Veuillez choisir le niveau de prestations souhaite : ");
+    scanf("%d", &niveauSouhete);
+
+    switch(niveauSouhete)
+    {
+        case 3 :
+            printf("Niveau 3 : details des plafonds de remboursement : \n");
+            printf("\tConsultations :	40 DT / acte\n\tMedicaments :	600 DT\n\tAnalyses :	300 DT\n\tRadiologie :	300 DT\n\tChirurgie :	2000 DT\n");
+            printf("Maximum de prestations remboursees = 5000 DT par prestataire et par an.");
+            break;
+
+        case 2 :
+            printf("Niveau 2 : détails des plafonds de remboursement : \n");
+            printf("\tConsultations :	30 DT / acte\n\tMédicaments :	600 DT\n\tAnalyses :	200 DT\n\tRadiologie :	250 DT\n\tChirurgie :	1800 DT\n");
+            printf("Maximum de prestations remboursees = 3500 DT par prestataire et par an.");
+            break;
+
+        case 1 :
+            printf("Niveau 1 : details des plafonds de remboursement : \n");
+            printf("\tConsultations :	20 DT / acte\n\tMédicaments :	400 DT\n\tAnalyses :	150 DT\n\tRadiologie :	180 DT\n\tChirurgie :	1500 DT\n");
+            printf("Maximum de prestations remboursees = 3000 DT par prestataire et par an.");
+            break;
+
+
+    }
+
+
+
+
+    break;
+case 'F':
+    printf("Liste des niveaux de prestations possibles :\n");
+    if(budgetMaximal>=1500)
+    {
+        printf("    niveau 1 : maximum de prestations remboursees = 3000 DT par an et par prestataire \n");
+        printf("    Tarif de cotisation total = 1500 DT.\n");
+    }
+
+    if(budgetMaximal>=1800)
+    {
+        printf("    niveau 2 : maximum de prestations remboursees = 3500 DT par an et par prestataire \n");
+        printf("    Tarif de cotisation total = 1800 DT.\n");
+    }
+    if(budgetMaximal>=2100)
+    {
+        printf("    niveau 3 : maximum de prestations remboursees = 5000 DT par an et par prestataire \n");
+        printf("    Tarif de cotisation total = 2100 DT.\n");
+    }
+//*****************************************************************************************
+    printf("Veuillez choisir le niveau de prestations souhaite : \n");
+    scanf("%d", &niveauSouhete);
+
+    switch(niveauSouhete)
+    {
+        case 3 :
+            printf("Niveau 3 : details des plafonds de remboursement : \n");
+            printf("\tConsultations :	40 DT / acte\n\tMédicaments :	600 DT\n\tAnalyses :	300 DT\n\tRadiologie :	300 DT\n\tChirurgie :	2000 DT\n");
+            break;
+
+        case 2 :
+            printf("Niveau 2 : details des plafonds de remboursement : \n");
+            printf("\tConsultations :	30 DT / acte\n\tMedicaments :	600 DT\n\tAnalyses :	200 DT\n\tRadiologie :	250 DT\n\tChirurgie :	1800 DT\n");
+            break;
+
+        case 1 :
+            printf("Niveau 1 : details des plafonds de remboursement : \n");
+            printf("\tConsultations :	20 DT / acte\n\tMedicaments :	400 DT\n\tAnalyses :	150 DT\n\tRadiologie :	180 DT\n\tChirurgie :	1500 DT\n");
+            break;
+
+
+    }
+
+
+    break;
+
+}
+printf("__________risque_______%c\n",risque);
+
+
+
+    system("pause");
+
+  return 0;
+}
